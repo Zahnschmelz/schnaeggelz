@@ -3,14 +3,10 @@
 
 
 ```
-> sudo apt install python3-venv
->
-> git clone https://github.com/Zahnschmelz/schnaeggelz.git
-> 
-> cd schnaeggelz
-> 
-> sudo chmod u+x ./run.sh
->
-> ./run.sh
+sudo apt install python3-venv
+git clone https://github.com/Zahnschmelz/schnaeggelz.git
+cd schnaeggelz
+sudo chmod u+x ./run.sh
+./run.sh
 
 ```
