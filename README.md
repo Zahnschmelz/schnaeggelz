@@ -2,8 +2,6 @@
 ## AND funny sounds
 
 
-``git cone https://github.com/Zahnschmelz/schnaeggelz.git
-  
-  cd schnaeggelz
-  
-  ./run.sh``
+> git cone https://github.com/Zahnschmelz/schnaeggelz.git
+> cd schnaeggelz
+> ./run.sh``
