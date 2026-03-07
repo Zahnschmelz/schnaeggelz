@@ -5,5 +5,6 @@
 > git clone https://github.com/Zahnschmelz/schnaeggelz.git
 > 
 > cd schnaeggelz
+> sudo chmod u+x ./run.sh
 >
 > ./run.sh
