@@ -2,7 +2,7 @@
 ## AND funny sounds
 
 
-> git cone https://github.com/Zahnschmelz/schnaeggelz.git
+> git clone https://github.com/Zahnschmelz/schnaeggelz.git
 > 
 > cd schnaeggelz
 >
