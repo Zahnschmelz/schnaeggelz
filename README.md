@@ -6,4 +6,4 @@
 > 
 > cd schnaeggelz
 >
-> ./run.sh``
+> ./run.sh
