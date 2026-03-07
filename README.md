@@ -12,3 +12,6 @@ sudo chmod u+x ./run.sh
 ./run.sh
 
 ```
+
+## used buildozer to build apk from python (pygame)
+check releases for apk
