@@ -3,7 +3,7 @@
 
 
 ```
-sudo apt install python3-venv
+sudo apt install python3-venv -y
 git clone https://github.com/Zahnschmelz/schnaeggelz.git
 cd schnaeggelz
 sudo chmod u+x ./run.sh
