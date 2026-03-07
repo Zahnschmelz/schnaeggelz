@@ -1,5 +1,7 @@
-# a simple snake game written in python with pygame 
-## AND funny sounds
+# A simple snake game written in python with pygame 
+## and funny sounds
+<img width="200" height="200" alt="schnaeggelz" src="https://github.com/user-attachments/assets/8afc84b0-a066-435d-989a-bb90a4c2c915" />
+
 
 
 ```
