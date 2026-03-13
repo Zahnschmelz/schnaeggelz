@@ -23,5 +23,5 @@ sudo chmod u+x ./run.sh
 ./run.sh
 ```
 
-## used buildozer to build apk from python (pygame) for android (sdl2)
+install on Android:
 check releases for apk
