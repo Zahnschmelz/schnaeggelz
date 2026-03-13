@@ -1,6 +1,6 @@
 import pygame
-from pygame import mixer
 import random
+import time
 from os import environ
 from sys import platform as _sys_platform
 
@@ -13,17 +13,89 @@ def platform():
         return 'win'
 
 pygame.init()
-mixer.init()
-pygame.display.init()
-
+switchSites = False
 infoObject = pygame.display.Info()
-breite = infoObject.current_w//100*100
-hoehe  = infoObject.current_h//100*100
+REALWIDTH = infoObject.current_w
+REALHEIGHT  = infoObject.current_h
+if REALHEIGHT > REALWIDTH:
+    switchSites = True
 
-groeße = 50
+WIDTH = 1920
+HEIGHT  = 1080
+if switchSites == True:
+    WIDTH = 1080
+    HEIGHT  = 1920
+breite = WIDTH
+hoehe = HEIGHT
+modes = pygame.display.list_modes()
+for mode in modes:
+    print(mode)
+
+
+#pygame.transform.scale(screen, (REALWIDTH, REALHEIGHT), realscreen)
+screen = pygame.display.set_mode((WIDTH, HEIGHT),pygame.FULLSCREEN)
+pygame.display.set_caption("Mandelbrot")
+time.sleep(1)
+BLACK = (0, 0, 0)
+computing_done=False
+def mandelbrot(c, max_iter):
+    z = 0
+    n = 0
+    while abs(z) <= 2 and n < max_iter:
+        z = z*z + c
+        n += 1
+    return n
+running = True
+iterationen = 256
+#while running:
+screen.fill(BLACK)
+if computing_done == False:
+    r = random.randrange(1,25)
+    g = random.randrange(1,25)
+    b = random.randrange(1,25)
+    mbax = []
+    mbay = []
+    mbac = []
+    for x in range(int(WIDTH/2)+1):
+        for y in range(int(HEIGHT)):
+            # Skaliere auf Mandelbrot-Bereich (-2.0, 1.0) x (-1.5j, 1.5j)
+            real = -2 + (y / HEIGHT) * 3
+            imag = -1 + (x / WIDTH) * 2
+            c = complex(real, imag)
+            m = mandelbrot(c, iterationen)
+            color = (m * r % 255, m * g % 255, m * b % 255)
+            screen.set_at((x, y), color)
+            screen.set_at((WIDTH -x, y), color)
+            mbax.append(x)
+            mbay.append(y)
+            mbac.append(color)
+        pygame.display.flip()
+    computing_done = True
+
+n=0
+for x in range(int(WIDTH//2)+1):
+    for y in range(HEIGHT):
+        screen.set_at((mbax[n],mbay[n]), mbac[n])
+        screen.set_at((WIDTH -mbax[n], mbay[n]), mbac[n])
+        n=n+1
+pygame.display.flip()
+pygame.image.save(screen , "screenshot.jpg")
+mbax = []
+mbay = []
+mbac = []
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        running = False
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        computing_done = False
+
+
+
+#______________________________________________________________________________
+groeße = 30
 nochmal = 0
 
-screen = pygame.display.set_mode((breite, hoehe),pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((breite, hoehe),pygame.FULLSCREEN)
 
 pygame.display.set_caption('Schnaeggelz')
 
@@ -32,8 +104,8 @@ if platform() == "android":
 elif platform() == "linux":
     path = "./"
 
-bgstart = (15, 50, 15)
-screen.fill(bgstart)  
+#bgstart = (15, 50, 15)
+#screen.fill(bgstart)
 waitmessage = pygame.font.Font(path+'UbuntuMono-R.ttf', 90).render(f'Schnaeggelz', False, (200, 150, 42))
 waitmessage_rect = waitmessage.get_rect(center=(breite/2, hoehe/2))
 screen.blit(waitmessage, waitmessage_rect)
@@ -45,7 +117,7 @@ while neustart == True:
     # Start-Variablen
     multi = 1
     score = 0
-    tempo = 40
+    tempo = 50
     richtungx = 1
     richtungy = 0
     richtungen = {pygame.K_UP:(0,-1), pygame.K_DOWN:(0,1), pygame.K_LEFT:(-1,0), pygame.K_RIGHT:(1,0)}
@@ -67,7 +139,7 @@ while neustart == True:
     letztex, letztey = richtungx, richtungy
     letztesnake = x, y
     sbzeit = 52
-    bg = (20, 20, 20)
+    #bg = (20, 20, 20)
     bg2 = (40, 40, 40)
     run = True
     cash = 20
@@ -162,17 +234,13 @@ while neustart == True:
     bonusx = random.randrange(breite) // groeße * groeße
     bonusy = random.randrange(hoehe) // groeße * groeße
 
-
     pygame.mouse.set_visible(False)
-    #pygame.mouse.set_pos(mposx)
-    #pygame.mouse.set_pos(mposx, mposy)
-
     pygame.mouse.set_visible(True)
-    #pygame.mouse.set_pos(mposx, mposy)
-    #pygame.mouse.set_visible(False)
+
+    bg = pygame.image.load("screenshot.jpg")
 
     while verzoegert == True:
-        screen.fill(bg)
+        screen.blit(bg, (0, 0))
         startmessage = pygame.font.Font(path+'UbuntuMono-R.ttf', 90).render(f'LOS GEHTS!', False, (150, 100, 50))
         startmessage_rect = startmessage.get_rect(center=(breite/2, hoehe/2))
         screen.blit(startmessage, startmessage_rect)
@@ -197,8 +265,18 @@ while neustart == True:
 
     while run:
         clock.tick(tempo // 5)
-        
-        screen.fill(bg)
+
+        #n=0
+        #for x in range(int(WIDTH//2)+1):
+        #    for y in range(HEIGHT):
+        #        screen.set_at((mbax[n],mbay[n]), mbac[n])
+        #        screen.set_at((WIDTH -mbax[n], mbay[n]), mbac[n])
+        #        n=n+1
+
+        screen.blit(bg, (0, 0))
+        #
+        #
+        #
         vorletztesnake = letztesnake[0], letztesnake[1]
         letztesnake = x, y
 
@@ -277,12 +355,12 @@ while neustart == True:
 
         # Pause
         while wait == True:
-            screen.fill(bg2)
+            #screen.fill(bg2)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     wait = False
                     channel9.play(startton)
-                    screen.fill(bg)
+                    #screen.fill(bg)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_AC_BACK or event.key == pygame.K_ESCAPE:
                         pygame.quit()
@@ -293,7 +371,7 @@ while neustart == True:
                     if event.key == pygame.K_RETURN:
                         wait = False
                         channel9.play(startton)
-                        screen.fill(bg)
+                        #screen.fill(bg)
             farbe = (255, 0, 0)
             for x, y in snake:
                 pygame.draw.rect(screen, (farbe), (x, y, groeße, groeße))
@@ -329,7 +407,7 @@ while neustart == True:
             if hungerfarbe2 >= 255:
                 hungerfarbe2 = 255
             hfarbe = (hungerfarbe1,hungerfarbe2,hungerfarbe3)
-            
+
         if verhungern >= 0:
             verhungern = verhungern - 1
 
@@ -343,20 +421,20 @@ while neustart == True:
                 y = hoehe - groeße
             if y + groeße > hoehe:
                 y = 0
-            bg = (0, 12, 2)
+            #bg = (0, 12, 2)
             if superbonus < sbzeit and bgint == 0:
-                bg = (100, 0, 0)
+                #bg = (100, 0, 0)
                 bgint = 2
                 if alarmcheck == 0:
                     channel1.play(alarmton)
                     alarmcheck = 1
             else:
                 if superbonus < sbzeit and bgint > 0:
-                    bg = (20, 20, 20)
+                    #bg = (20, 20, 20)
                     bgint = bgint - 1
 
-        else:
-            bg = (20, 20, 20)
+        #else:
+            #bg = (20, 20, 20)
 
         # Gueltigkeitspruefung
         if x < 0 or x + groeße > breite or y < 0 or y + groeße > hoehe or (x, y) in snake and superbonus == 0 or tot == 1:
@@ -403,7 +481,7 @@ while neustart == True:
             while (bonusx, bonusy) in snake or (bonusx, bonusy) in (bonusx2, bonusy2) or (bonusx, bonusy) in (multibonusx1, multibonusy1) or (bonusx, bonusy) in (multibonusx2, multibonusy2) or (bonusx, bonusy) in (multibonusx3, multibonusy3):
                 bonusx = random.randrange(breite) // groeße * groeße
                 bonusy = random.randrange(hoehe) // groeße * groeße
-            
+
             # Superbonus
             laenge = len(snake)
             # hier
@@ -441,7 +519,7 @@ while neustart == True:
             schade = 0
             superbonus = 450
             score = score + (cash * 2)
-            tempo = tempo + 2
+            tempo = tempo + 1
             multi += 0.5
             bonusx2 = -100
             bonusy2 = -110
@@ -452,7 +530,7 @@ while neustart == True:
                 channel4.play(nichtnormal)
             verlaengern = 3
             alarmcheck = 0
-        
+
         #Multibonus1 essen
         elif x == multibonusx1 and y == multibonusy1:
             multibonusx1 = -50
@@ -472,7 +550,7 @@ while neustart == True:
             hfarbe = (hungerfarbe1,hungerfarbe2,hungerfarbe3)
             farbe = hfarbe
             channel7.play(nesch)
-            
+
 
         else:
             if laenge >= 5 and verlaengern == 0:
@@ -588,7 +666,8 @@ while neustart == True:
                     pygame.quit()
                     ende = False
                     neustart = False
-        screen.fill(bg2)
+        #screen.fill(bg2)
+        screen.blit(bg, (0, 0))
         farbe = (255, 0, 0)
         for x, y in snake:
             pygame.draw.rect(screen, (farbe), (x, y, groeße, groeße))
