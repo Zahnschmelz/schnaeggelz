@@ -24,4 +24,7 @@ sudo chmod u+x ./run.sh
 ```
 
 install on Android:
+
 check releases for apk
+
+https://github.com/Zahnschmelz/schnaeggelz/releases/download/schnaeggelz/schnaeggelz-0.1-arm64-v8a_armeabi-v7a-debug.apk
