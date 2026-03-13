@@ -27,9 +27,9 @@ if switchSites == True:
     HEIGHT  = 1920
 breite = WIDTH
 hoehe = HEIGHT
-modes = pygame.display.list_modes()
-for mode in modes:
-    print(mode)
+#modes = pygame.display.list_modes()
+#for mode in modes:
+#    print(mode)
 
 
 #pygame.transform.scale(screen, (REALWIDTH, REALHEIGHT), realscreen)
@@ -115,7 +115,7 @@ neustart = True
 while neustart == True:
     neustart = False
     # Start-Variablen
-    multi = 1
+    multi = 2
     score = 0
     tempo = 50
     richtungx = 1
@@ -142,7 +142,7 @@ while neustart == True:
     #bg = (20, 20, 20)
     bg2 = (40, 40, 40)
     run = True
-    cash = 20
+    cash = 25
     clock = pygame.time.Clock()
     dbclock = pygame.time.Clock()
     verzoegert = True
@@ -210,6 +210,7 @@ while neustart == True:
     hungerfarbe3 = 0
     hfarbe = (hungerfarbe1,hungerfarbe2,hungerfarbe3)
     tot = 0
+    bonusblink = False
 
     # Startposition-Schlaenggler
     ran1 = random.randrange(4)
@@ -375,7 +376,8 @@ while neustart == True:
             farbe = (255, 0, 0)
             for x, y in snake:
                 pygame.draw.rect(screen, (farbe), (x, y, groeße, groeße))
-            pygame.draw.rect(screen, (255, 0, 0), (bonusx, bonusy, groeße, groeße))
+
+            pygame.draw.rect(screen, (bonusfarbe), (bonusx, bonusy, groeße, groeße))
             pygame.draw.rect(screen, (255, 0, 0), (bonusx2, bonusy2, groeße, groeße))
             pygame.draw.rect(screen, (255, 0, 0), (multibonusx1, multibonusy1, groeße, groeße))
             pygame.display.update()
@@ -520,7 +522,7 @@ while neustart == True:
             superbonus = 450
             score = score + (cash * 2)
             tempo = tempo + 1
-            multi += 0.5
+            multi += 1
             bonusx2 = -100
             bonusy2 = -110
             ranups = random.randrange(2)
@@ -561,29 +563,35 @@ while neustart == True:
         # Draw the Schnaeggler =)
         for x, y in snake:
             pygame.draw.rect(screen, (farbe), (x, y, groeße, groeße))
-         # Draw the Bonus =)
-        pygame.draw.rect(screen, (255, 0, 0),
-                            (bonusx, bonusy, groeße, groeße))
 
-        if score >= 1000 and tatuetatacheck1 == 0:
-            channel7.play(tatuetata2ton)
-            tatuetatacheck1 = 1
-            tempo = tempo - 1
+        # Draw the Bonus =)
+        if bonusblink == True:
+            bonusfarbe = 127, 0 ,0
+            bonusblink = False
+        else:
+            bonusfarbe = 255, 0 ,0
+            bonusblink = True
+        pygame.draw.rect(screen, (bonusfarbe), (bonusx, bonusy, groeße, groeße))
 
-        if score >= 2000 and tatuetatacheck2 == 0:
-            channel7.play(tatuetataton)
-            tatuetatacheck2 = 1
-            tempo = tempo - 2
+#        if score >= 1000 and tatuetatacheck1 == 0:
+#            channel7.play(tatuetata2ton)
+#            tatuetatacheck1 = 1
+#            tempo = tempo - 1
 
-        if score >= 4000 and tatuetatacheck3 == 0:
-            channel7.play(tatuetata2ton)
-            tatuetatacheck3 = 1
-            tempo = tempo - 4
+#        if score >= 2000 and tatuetatacheck2 == 0:
+#            channel7.play(tatuetataton)
+#            tatuetatacheck2 = 1
+#            tempo = tempo - 2
 
-        if score >= 8000 and tatuetatacheck4 == 0:
-            channel7.play(tatuetataton)
-            tatuetatacheck4 = 1
-            tempo = tempo - 8
+#        if score >= 4000 and tatuetatacheck3 == 0:
+#            channel7.play(tatuetata2ton)
+#            tatuetatacheck3 = 1
+#            tempo = tempo - 4
+
+#        if score >= 8000 and tatuetatacheck4 == 0:
+#            channel7.play(tatuetataton)
+#            tatuetatacheck4 = 1
+#            tempo = tempo - 8
 
         # Draw the superbonus blinken
         if bonus2int > 0:
@@ -646,7 +654,7 @@ while neustart == True:
             score = int(score)
 
         ergebnis = pygame.font.Font(path+'simple_small_pixels.ttf', 24).render(
-            f'Laenge: {laenge}, Tempo: {tempo -39}, Punkte: {score}', False, (250, 250, 250))
+            f'Laenge: {laenge}, Tempo: {tempo -49}, Punkte: {score}', False, (250, 250, 250))
         screen.blit(ergebnis, (breite - ergebnis.get_width(), 5))
 
         pygame.display.flip()
