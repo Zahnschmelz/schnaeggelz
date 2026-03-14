@@ -56,28 +56,52 @@ if computing_done == False:
     mbax = []
     mbay = []
     mbac = []
-    for x in range(int(WIDTH/2)+1):
-        for y in range(int(HEIGHT)):
-            # Skaliere auf Mandelbrot-Bereich (-2.0, 1.0) x (-1.5j, 1.5j)
-            real = -2 + (y / HEIGHT) * 3
-            imag = -1 + (x / WIDTH) * 2
-            c = complex(real, imag)
-            m = mandelbrot(c, iterationen)
-            color = (m * r % 255, m * g % 255, m * b % 255)
-            screen.set_at((x, y), color)
-            screen.set_at((WIDTH -x, y), color)
-            mbax.append(x)
-            mbay.append(y)
-            mbac.append(color)
-        pygame.display.flip()
+    if switchSites == True:
+        for x in range(int(WIDTH/2)+1):
+            for y in range(int(HEIGHT)):
+                # Skaliere auf Mandelbrot-Bereich (-2.0, 1.0) x (-1.5j, 1.5j)
+                real = -2 + (y / HEIGHT) * 3
+                imag = -1 + (x / WIDTH) * 2
+                c = complex(real, imag)
+                m = mandelbrot(c, iterationen)
+                color = (m * r % 255, m * g % 255, m * b % 255)
+                screen.set_at((y, x), color)
+                screen.set_at((y, WIDTH -x), color)
+                mbax.append(x)
+                mbay.append(y)
+                mbac.append(color)
+            pygame.display.flip()
+    else:
+        for x in range(int(HEIGHT)):#/2)+1):
+            for y in range(WIDTH):
+                # Skaliere auf Mandelbrot-Bereich (-2.0, 1.0) x (-1.5j, 1.5j)
+                real = -2 + (y / WIDTH) * 3
+                imag = -1 + (x / HEIGHT) * 2
+                c = complex(real, imag)
+                m = mandelbrot(c, iterationen)
+                color = (m * r % 255, m * g % 255, m * b % 255)
+                screen.set_at((y, x), color)
+                screen.set_at((y, HEIGHT -x), color)
+                mbax.append(x)
+                mbay.append(y)
+                mbac.append(color)
+            pygame.display.flip()
+
     computing_done = True
 
 n=0
-for x in range(int(WIDTH//2)+1):
-    for y in range(HEIGHT):
-        screen.set_at((mbax[n],mbay[n]), mbac[n])
-        screen.set_at((WIDTH -mbax[n], mbay[n]), mbac[n])
-        n=n+1
+if switchSites == True:
+    for x in range(int(WIDTH/2)+1):
+        for y in range(HEIGHT):
+            screen.set_at((mbax[n],mbay[n]), mbac[n])
+            screen.set_at((WIDTH -mbax[n], mbay[n]), mbac[n])
+            n=n+1
+else:
+    for x in range(int(HEIGHT/2)+1):
+        for y in range(WIDTH):
+            screen.set_at((mbay[n],mbax[n]), mbac[n])
+            screen.set_at((mbay[n], HEIGHT - mbax[n]), mbac[n])
+            n=n+1
 pygame.display.flip()
 pygame.image.save(screen , "screenshot.jpg")
 mbax = []
@@ -662,7 +686,7 @@ while neustart == True:
     # Highscore
     while ende:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN or event.key == pygame.K_RETURN:
                 neustart = True
                 run = True
                 ende = False
