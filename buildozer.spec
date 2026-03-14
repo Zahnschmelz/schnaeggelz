@@ -7,7 +7,7 @@ title = schnaeggelz
 package.name = schnaeggelz
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.beezi
+package.domain = com.myDomain
 
 # (str) Source code where the main.py live
 source.dir = .
